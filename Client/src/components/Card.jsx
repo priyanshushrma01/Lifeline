@@ -1,6 +1,6 @@
 
 export const Card = ()=>{
-    return <div className="flex justify-center">
+    return <div className="flex justify-center mt-20">
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-2xl">
             <a href="#">
                 <img className="rounded-t-lg" src="../src/assets/patient.jpg" alt="" />

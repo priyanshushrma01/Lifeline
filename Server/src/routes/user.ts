@@ -36,8 +36,9 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<void> =>
                 date_of_birth: body.date_of_birth,
                 phone_number: body.phone_number, // Corrected this to match the schema
             });
+            const userid = newUser._id;
             const secret = process.env.JWT_PASSWORD || "";
-            const token = jwt.sign({username:newUser.username},secret,{expiresIn:"1d"});
+            const token = jwt.sign({userid},secret,{expiresIn:"1d"});
             res.cookie("token",token);
             res.json({
                 message:"User created Successfully!",
