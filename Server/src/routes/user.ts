@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from "express";
 import zod from "zod";
 import { user } from "../db/db"; 
 import jwt from "jsonwebtoken";
+import upload from "../middleware/multer";
 
 const userRouter: Router = express.Router();
 
@@ -15,12 +16,15 @@ const signupBody = zod.object({
     phone_number: zod.string().min(10), // Fixed typo
 });
 
-userRouter.post("/signup", async (req: Request, res: Response): Promise<void> => {
+userRouter.post("/signup",upload.single("file"), async (req: Request, res: Response): Promise<void> => {
     const body = req.body;
     const validation = signupBody.safeParse(body);
     
     if (!validation.success) {
-        res.json({ error: "Invalid signup data" });
+        res.json({ 
+            error: "Invalid signup data", 
+            filedata:req.file,
+        });
     } else {
         const olduser = await user.findOne({ username: body.username });
         
@@ -40,8 +44,17 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<void> =>
             const secret = process.env.JWT_PASSWORD || "";
             const token = jwt.sign({userid},secret,{expiresIn:"1d"});
             res.cookie("token",token);
+            const filedata = req.file;
+            let url;
+            if (filedata) {
+              url = filedata.path;
+            // ... rest of the code
+            } else {
+             url = "";
+            }
             res.json({
                 message:"User created Successfully!",
+                filedata:req.file,
             });
         }
     }
