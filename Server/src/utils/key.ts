@@ -1,0 +1,1 @@
+export const JWT_PASSWORD = 'LifeLine17Server';

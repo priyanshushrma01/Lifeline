@@ -1,68 +1,66 @@
 import express, { Request, Response, Router } from "express";
-import jwt from "jsonwebtoken";
 import { card } from "../db/db";
+import { check } from "../middleware/Tcheck";
+import zod from 'zod';
+import upload from "../middleware/multer";
 
 const postRouter = express.Router();
 
-postRouter.use("/*",async (req:any,res:any,next:any)=>{
-    const authHeader = req.headers.authorization;
-    if(!authHeader){
-        return res.status(403).json({
-            msg:"failed"
-        })
-    }
-    // const token = header?.split(" ")[1] || "";
-    try{
-      const decoded = jwt.verify(token,process.env.JWT_SECRET);
-    
-    if(decoded.userid){
-      req.createrid = decoded.userid;
-      next();
-    }else{
-      return res.status(403).json({});
-    }
-    }
-    catch(e){
-      return res.status(403).json({
-        msg:"Unauthorized"
-      })
-    }
-    
-  })
+const createzod = zod.object({
+  user_id:zod.string(),
+  title:zod.string().min(4),
+  description:zod.string().min(8),
+  photo_id:zod.string(),
+  urgent_need:zod.boolean(),
+  target:zod.number(),
+  operation_date:zod.date(),
+  supporters:zod.number(),
+})
 
-
-postRouter.post('/',async (req:any,res:any) => {
+postRouter.post('/create',check,upload.single('file'),async (req:Request,res:Response):Promise<void> => {
     const body = req.body;
     const createrid = req.createrid;
 
-    //do validation rishabh
+    const { success} = createzod.safeParse(body);
+    if(!success){
+        res.status(411);
+        res.json({
+          msg:"Wrong Inputs"
+        })
+    }else{
+      try{
+        let photoid;
+        if(req.file){
+          photoid = req.file.path;
+        }
+        else{
+          photoid = "";
+        }
+        const Post = await card.create({
+            user_id:createrid,
+            title:body.title,
+            description:body.description,
+            photo_id:photoid,
+            urgent_need:body.urgent_need,
+            target:body.target,
+            operation_date:body.operation_date,
+            supporters:body.supporters
+        })
 
-    //const { success} = createPostInput.safeParse(body);
-    // if(!success){
-    //     res.status(411);
-    //     return res.json({
-    //       msg:"Wrong Inputs"
-    //     })
-    // }  
-    const Post = await card.create({
-        user_id:createrid,
-        title:body.title,
-        description:body.description,
-        photo_id:body.photo_id,
-        urgent_need:body.urgent_need,
-        target:body.target,
-        operation_date:body.operation_date,
-        supporters:body.supporters
-    })
-    
-    return res.json({
-      id:Post._id
-    })
+        res.json({
+          message:"Card created successfully!",
+        })
+      }
+      catch(e){
+        console.log(e);
+        res.status(500).json({message:"Server Error"});
+      }
+    } 
 })
 
-postRouter.get('/bulk',async (req:any,res:any)=>{
+postRouter.get('/bulk',async (req:Request,res:Response):Promise<void> =>{
     const posts = await card.find();
-    return res.json(posts);
+    res.json(posts);
 })
 
 

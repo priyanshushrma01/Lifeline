@@ -31,30 +31,32 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
         if (olduser) {            
             res.json({ message: "Username already taken" });
         } else {
+            const filedata = req.file;
+            let url;
+            if(filedata){
+                url = filedata.path;
+            }
+            else{
+                url = "";
+            }
             const newUser = await user.create({
                 username: body.username,
                 firstname: body.firstname,
                 lastname: body.lastname,
+                photo_id:url,
                 password: body.password,
                 email: body.email,
                 date_of_birth: body.date_of_birth,
                 phone_number: body.phone_number, // Corrected this to match the schema
             });
             const userid = newUser._id;
+            const username = newUser.username;
             const secret = process.env.JWT_PASSWORD || "";
-            const token = jwt.sign({userid},secret,{expiresIn:"1d"});
+            const token = jwt.sign({userid,username},secret,{expiresIn:"1d"});
             res.cookie("token",token);
-            const filedata = req.file;
-            let url;
-            if (filedata) {
-              url = filedata.path;
-            // ... rest of the code
-            } else {
-             url = "";
-            }
             res.json({
                 message:"User created Successfully!",
-                filedata:req.file,
+                url:url,
             });
         }
     }

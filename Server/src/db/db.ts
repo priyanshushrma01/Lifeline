@@ -4,6 +4,10 @@ const usermodel = new mongoose.Schema({
     username:String,
     firstname:String,
     lastname:String,
+    photo_id:{
+        type:String,
+        default:"",
+    },
     password:String,
     email:String,
     date_of_birth:Date,
