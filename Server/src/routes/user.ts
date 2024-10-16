@@ -3,6 +3,7 @@ import zod from "zod";
 import { user } from "../db/db"; 
 import jwt from "jsonwebtoken";
 import upload from "../middleware/multer";
+import { JWT_PASSWORD } from "../utils/key";
 
 const userRouter: Router = express.Router();
 
@@ -11,16 +12,18 @@ const signupBody = zod.object({
     firstname: zod.string(),
     lastname: zod.string(),
     password: zod.string().min(4),
-    email: zod.string().email(),
+    email: zod.string(),
     date_of_birth: zod.string(),
-    phone_number: zod.string().min(10), // Fixed typo
+    phone_number: zod.string().min(10),
 });
 
 userRouter.post("/signup",upload.single("file"), async (req: Request, res: Response): Promise<void> => {
     const body = req.body;
+    console.log(body);
     const validation = signupBody.safeParse(body);
     
     if (!validation.success) {
+        console.log(validation.error);
         res.json({ 
             error: "Invalid signup data", 
             filedata:req.file,
@@ -51,7 +54,7 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             });
             const userid = newUser._id;
             const username = newUser.username;
-            const secret = process.env.JWT_PASSWORD || "";
+            const secret = JWT_PASSWORD;
             const token = jwt.sign({userid,username},secret,{expiresIn:"1d"});
             res.cookie("token",token);
             res.json({
