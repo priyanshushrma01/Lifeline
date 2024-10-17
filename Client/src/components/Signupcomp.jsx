@@ -82,7 +82,7 @@ export const Signupcomp = () => {
                 <button 
                     className={`border-2 border-black border-solid text-3xl mt-2 rounded-2xl p-4 ${loading ? "bg-gray-500" : "bg-red-500"}`} 
                     onClick={handleCreate} 
-                    disabled={loading} // Disable button while loading
+                    disabled={loading} 
                 >
                     {loading ? "Creating Account..." : "Create Account"}
                 </button>

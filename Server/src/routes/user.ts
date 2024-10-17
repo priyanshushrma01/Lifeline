@@ -59,6 +59,7 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             res.cookie("token",token);
             res.json({
                 message:"User created Successfully!",
+                filedata:filedata,
                 url:url,
             });
         }

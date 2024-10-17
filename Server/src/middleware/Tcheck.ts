@@ -7,6 +7,7 @@ export async function check(req:Request,res:Response,next:any): Promise<void>{
         res.status(403).json({
             msg:"failed"
         })
+        return;
     }
     const token = authHeader?.split(" ")[1] || "";
     try{

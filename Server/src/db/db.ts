@@ -20,9 +20,12 @@ const cardmodel = new mongoose.Schema({
         ref:"User",
         required:true,
     },
+    relation:String,
+    employement:String,
     title:String,
     description:String,
     photo_id:String,
+    document_id:String,
     urgent_need:{
         type:Boolean,
         default:false,

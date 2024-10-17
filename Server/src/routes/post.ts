@@ -17,46 +17,57 @@ const createzod = zod.object({
   supporters:zod.number(),
 })
 
-postRouter.post('/create',check,upload.single('file'),async (req:Request,res:Response):Promise<void> => {
+postRouter.post(
+  '/create',
+  check,
+  upload.fields([{ name: 'file' }, { name: 'photo' }]), 
+  async (req: Request, res: Response): Promise<void> => {
     const body = req.body;
     const createrid = req.createrid;
 
-    const { success} = createzod.safeParse(body);
-    if(!success){
-        res.status(411);
-        res.json({
-          msg:"Wrong Inputs"
-        })
-    }else{
-      try{
-        let photoid;
-        if(req.file){
-          photoid = req.file.path;
-        }
-        else{
-          photoid = "";
-        }
-        const Post = await card.create({
-            user_id:createrid,
-            title:body.title,
-            description:body.description,
-            photo_id:photoid,
-            urgent_need:body.urgent_need,
-            target:body.target,
-            operation_date:body.operation_date,
-            supporters:body.supporters
-        })
+    const { success } = createzod.safeParse(body);
+    if (!success) {
+      res.status(411).json({
+        msg: "Wrong Inputs"
+      });
+      return;
+    }
 
-        res.json({
-          message:"Card created successfully!",
-        })
+    try {
+      let filePath: string | undefined = "";
+      let photoPath: string | undefined = "";
+      
+      console.log(req.files);
+
+      // Check if the file fields are present in the request
+      if (req.files) {
+        // filePath = (req.files as Express.Multer.File[])[0]?.path;
+        // photoPath = (req.files['photo'] as Express.Multer.File[])[0]?.path;
       }
-      catch(e){
-        console.log(e);
-        res.status(500).json({message:"Server Error"});
-      }
-    } 
-})
+
+      const Post = await card.create({
+        user_id: createrid,
+        title: body.title,
+        description: body.description,
+        file_id: filePath, // Save the file path (or undefined if not uploaded)
+        photo_id: photoPath, // Save the photo path (or undefined if not uploaded)
+        urgent_need: body.urgent_need,
+        employement: body.employement,
+        target: body.target,
+        operation_date: body.operation_date,
+        supporters: body.supporters
+      });
+
+      res.json({
+        message: "Card created successfully!",
+      });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: "Server Error" });
+    }
+  }
+);
+
 
 postRouter.get('/bulk',async (req:Request,res:Response):Promise<void> =>{
     const posts = await card.find();

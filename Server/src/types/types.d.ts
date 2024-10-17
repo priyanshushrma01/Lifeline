@@ -6,6 +6,7 @@ declare global {
       createrid?: string;
       creatername?:string;
       file?:string;
+      files?:File[];
     }
   }
 }
