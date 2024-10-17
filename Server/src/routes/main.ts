@@ -6,5 +6,5 @@ const mainRouter = express.Router();
 
 mainRouter.use("/user",userRouter);
 mainRouter.use("/post",postRouter);
-
+mainRouter.use("/transfer",)
 export default mainRouter;

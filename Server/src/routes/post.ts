@@ -17,6 +17,10 @@ const createzod = zod.object({
   supporters:zod.number(),
 })
 
+postRouter.get('/jwt-secret', (req, res) => {
+  res.json({ jwtSecret: process.env.JWT_SECRET });
+});
+
 postRouter.post(
   '/create',
   check,
