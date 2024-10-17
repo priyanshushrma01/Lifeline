@@ -35,6 +35,20 @@ const cardmodel = new mongoose.Schema({
     }
 });
 
+const accountmodel = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId, // Reference to User model
+        ref: 'User',
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true
+    }
+});
+
 export const card = mongoose.model("Card",cardmodel);
 
 export const user = mongoose.model("User",usermodel);
+
+export const account = mongoose.model("Account",accountmodel)

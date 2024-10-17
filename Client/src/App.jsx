@@ -3,6 +3,7 @@ import { AppLayout } from './components/AppLayout';
 import { Card } from './components/Card';
 import { Error } from './pages/Error'; 
 import { Signup } from './pages/Signup';
+import { SendMoney } from './pages/SendMoney';
 
 function App() {
   const AppRouter = createBrowserRouter([
@@ -20,6 +21,11 @@ function App() {
     {
       path:'/signup',
       element: <Signup />,
+      
+    },
+    {
+      path:'/payment',
+      element: <SendMoney />,
       
     }
   ]);

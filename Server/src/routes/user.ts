@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import zod from "zod";
-import { user } from "../db/db"; 
+import { account, user } from "../db/db"; 
 import jwt from "jsonwebtoken";
 import upload from "../middleware/multer";
 import { JWT_PASSWORD } from "../utils/key";
@@ -56,6 +56,12 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             const username = newUser.username;
             const secret = JWT_PASSWORD;
             const token = jwt.sign({userid,username},secret,{expiresIn:"1d"});
+
+            await account.create({
+                userid,
+                balance:100+ Math.random()*10000
+            })
+
             res.cookie("token",token);
             res.json({
                 message:"User created Successfully!",
