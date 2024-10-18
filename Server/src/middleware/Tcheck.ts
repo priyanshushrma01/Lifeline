@@ -9,7 +9,7 @@ export async function check(req:Request,res:Response,next:any): Promise<void>{
         })
         return;
     }
-    const token = authHeader?.split(" ")[1] || "";
+    const token = authHeader;
     try{
       const decoded = jwt.verify(token,process.env.JWT_SECRET || "") as JwtPayload;
 

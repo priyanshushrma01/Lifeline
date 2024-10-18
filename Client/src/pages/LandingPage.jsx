@@ -7,7 +7,7 @@ export function Landingpage () {
     return <>
     <Fund/>
     <Card />
-    <Works/>
     <SuccessStories/>
+    <Works/>
     </>
 }

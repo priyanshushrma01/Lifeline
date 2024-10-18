@@ -13,7 +13,7 @@ const createzod = zod.object({
   photo_id:zod.string(),
   urgent_need:zod.boolean(),
   target:zod.number(),
-  operation_date:zod.date(),
+  operation_date:zod.string(),
   supporters:zod.number(),
 })
 
@@ -23,11 +23,10 @@ postRouter.get('/jwt-secret', (req, res) => {
 
 postRouter.post(
   '/create',
-  check,
   upload.fields([{ name: 'file' }, { name: 'photo' }]), 
   async (req: Request, res: Response): Promise<void> => {
     const body = req.body;
-    const createrid = req.createrid;
+    const createrid = req.body.user_id;
 
     const { success } = createzod.safeParse(body);
     if (!success) {
@@ -78,6 +77,12 @@ postRouter.get('/bulk',async (req:Request,res:Response):Promise<void> =>{
     res.json(posts);
 })
 
-
+postRouter.get('/single/:id',async (req:Request,res:Response):Promise<void> => {
+  const id = req.params.id;
+  const data = await card.findById({ id: id });
+  res.json({
+    data:data,
+  })
+});
 
 export default postRouter;

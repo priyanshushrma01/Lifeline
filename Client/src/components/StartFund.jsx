@@ -75,7 +75,7 @@ export const StartFundcomp = () => {
         </div>
         <div>
           <label htmlFor="education" className="block text-sm font-medium text-gray-700">
-            Your Education Qualification *
+            Categeory *
           </label>
           <select
             id="education"
@@ -84,10 +84,11 @@ export const StartFundcomp = () => {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-teal-500 focus:border-teal-500"
           >
             <option value="">Select...</option>
-            <option value="highschool">High School</option>
-            <option value="bachelor">Bachelor’s Degree</option>
-            <option value="master">Master’s Degree</option>
-            <option value="phd">PhD</option>
+            <option value="highschool">Children</option>
+            <option value="bachelor">Animal</option>
+            <option value="master">Food And Hunger</option>
+            <option value="phd">Women</option>
+            <option value="phd">Men</option>
           </select>
         </div>
 

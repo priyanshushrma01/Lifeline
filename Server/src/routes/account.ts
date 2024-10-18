@@ -69,3 +69,4 @@ accountRouter.post("/transfer",async (req:any,res:any)=>{
 })
 
 
+export default accountRouter;

@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import cors from "cors";
 import mainRouter from "./routes/main";
 import cookieParser from 'cookie-parser';
@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-const jwtsecret = process.env.JWT_SECRET
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
