@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { SearchBar } from './SearchBar';
 
 export function Browsefunds() {
   const [Data, setData] = useState(null);
@@ -15,8 +16,8 @@ export function Browsefunds() {
   }, []); 
 
   return (
-    <div className="">
-        <div></div>
+    <div className="m-20">
+        <SearchBar/>
         <div>
             {Data &&
                 Data.data.map((post) => (
