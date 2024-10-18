@@ -22,6 +22,7 @@ const cardmodel = new mongoose.Schema({
     },
     relation:String,
     employement:String,
+    categeory:String,
     title:String,
     description:String,
     photo_id:String,
@@ -40,7 +41,7 @@ const cardmodel = new mongoose.Schema({
 
 const accountmodel = new mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId, // Reference to User model
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },

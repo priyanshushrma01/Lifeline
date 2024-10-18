@@ -4,6 +4,7 @@ import { account, user } from "../db/db";
 import jwt from "jsonwebtoken";
 import upload from "../middleware/multer";
 import { JWT_PASSWORD } from "../utils/key";
+import { check } from "../middleware/Tcheck";
 
 const userRouter: Router = express.Router();
 
@@ -50,7 +51,7 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
                 password: body.password,
                 email: body.email,
                 date_of_birth: body.date_of_birth,
-                phone_number: body.phone_number, // Corrected this to match the schema
+                phone_number: body.phone_number, 
             });
             const userid = newUser._id;
             const username = newUser.username;
@@ -58,7 +59,7 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             const token = jwt.sign({userid,username},secret,{expiresIn:"1d"});
 
             await account.create({
-                userid,
+                user_id:userid,
                 balance:100+ Math.random()*10000
             })
 
@@ -66,6 +67,7 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             res.json({
                 message:"User created Successfully!",
                 filedata:filedata,
+                token:token,
                 url:url,
             });
         }
@@ -103,5 +105,21 @@ userRouter.post("/signin",async (req: Request, res: Response) => {
         }
     }
 });
+
+userRouter.get('/me',check,async function(req:Request,res:Response) {
+    const id = req.createrid;
+
+    const me = await user.findById({_id:id});
+    if(me){
+        res.json({
+            me,
+        });
+    }
+    else{
+        res.json({
+            mesaage:"User does'nt exist!",
+        })
+    }
+})
 
 export default userRouter;

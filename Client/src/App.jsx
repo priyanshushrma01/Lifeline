@@ -2,6 +2,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AppLayout } from './components/AppLayout';
 import { Error } from './pages/Error'; 
 import { Signup } from './pages/Signup';
+import { Browsefunds } from './components/Browsefunds';
+import { Landingpage } from './pages/LandingPage'
+import { StartFundcomp } from './components/StartFund';
 
 function App() {
   const AppRouter = createBrowserRouter([
@@ -14,12 +17,20 @@ function App() {
           path:'/',
           element: <Landingpage />,
         },
+        {
+          path:'/browsfunds',
+          element:<Browsefunds />,
+        }
       ]
     },
     {
       path:'/signup',
       element: <Signup />,
       
+    },
+    {
+      path:'/new/createfund',
+      element:<StartFundcomp />
     }
   ]);
 
