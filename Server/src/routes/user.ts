@@ -20,11 +20,9 @@ const signupBody = zod.object({
 
 userRouter.post("/signup",upload.single("file"), async (req: Request, res: Response): Promise<void> => {
     const body = req.body;
-    console.log(body);
     const validation = signupBody.safeParse(body);
     
     if (!validation.success) {
-        console.log(validation.error);
         res.json({ 
             error: "Invalid signup data", 
             filedata:req.file,
