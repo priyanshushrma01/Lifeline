@@ -1,4 +1,3 @@
-// InputField.jsx
 import React, { useState } from 'react';
 
 const InputField = ({ label ,placeholder, type ,onChange}) => {
@@ -6,12 +5,10 @@ const InputField = ({ label ,placeholder, type ,onChange}) => {
 
   return (
     <div className="relative w-full my-4">
-      {/* Label */}
       <label className="absolute top-1 left-4 text-gray-500 text-sm">
         {label}
       </label>
 
-      {/* Input */}
       <input
         type= {type ||"text"}
         placeholder={placeholder}

@@ -4,10 +4,10 @@ import SuccessStories from '../components/SuccessStory/SuccessStories';
 import {Card} from '../components/Card';
 
 export function Landingpage () {
-    return <>
+    return <div className="bg-gray-800">
     <Fund/>
     <Card />
     <SuccessStories/>
     <Works/>
-    </>
+    </div>
 }

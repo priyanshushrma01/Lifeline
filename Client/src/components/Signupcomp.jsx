@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import InputField from "./Inputbox";
+import { Link } from 'react-router-dom'
 
 export const Signupcomp = () => {
     const [firstName, setFirstName] = useState("");
@@ -38,12 +39,14 @@ export const Signupcomp = () => {
         formData.append('date_of_birth', Dob);
         formData.append('password', password);
 
-        setLoading(true); // Start loading
+        setLoading(true);
 
         try {
             const request = await axios.post("http://localhost:3000/api/v1/user/signup", formData);
             console.log(request);
             if (request.status === 200) {
+                const token = request.data.token;
+                localStorage.setItem('token',token);
                 navigate('/');
             } else {
                 console.log("Error in creating user");
@@ -52,7 +55,7 @@ export const Signupcomp = () => {
             console.error("Signup error:", error);
             alert("An error occurred while signing up. Please try again.");
         } finally {
-            setLoading(false); // End loading
+            setLoading(false); 
         }
     }
 
@@ -71,21 +74,24 @@ export const Signupcomp = () => {
                         <InputField label={"Password"} type={"password"} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div className="w-2/6 flex flex-col my-auto">
-                        <div className="w-52 h-52 m-4 border-2 border-black border-solid flex justify-center items-center rounded-full overflow-hidden">
+                        <div className="w-52 h-52 m-4 ml-20 border-2 border-black border-solid flex justify-center items-center rounded-full overflow-hidden">
                             <img src={photourl} className="object-cover w-full h-full" alt="Rounded example" />
                         </div>
-                        <div className="flex flex-col">
-                            <input type="file" onChange={handlefileChange} className="mt-2 mb-4" />
+                        <div className="flex flex-col ml-20">
+                            <input type="file" onChange={handlefileChange} className="mt-2 mb-4 " />
                         </div>
+                        <button 
+                        className={`border-2 border-black border-solid text-3xl mt-6 rounded-2xl p-4 ${loading ? "bg-gray-500" : "bg-red-500"}`} 
+                        onClick={handleCreate} 
+                        disabled={loading} >
+                        {loading ? "Creating Account..." : "Create Account"}
+                        </button>
                     </div>
                 </div>
-                <button 
-                    className={`border-2 border-black border-solid text-3xl mt-2 rounded-2xl p-4 ${loading ? "bg-gray-500" : "bg-red-500"}`} 
-                    onClick={handleCreate} 
-                    disabled={loading} 
-                >
-                    {loading ? "Creating Account..." : "Create Account"}
-                </button>
+                <div className="text-center  text-xl mt-6 text-gray-600">
+                 Already have an account ? then <Link to="/signin" className="font-medium text-blue-600 hover:text-blue-800">Sign up</Link>
+                </div>
+                
             </div>
         </div>
     );

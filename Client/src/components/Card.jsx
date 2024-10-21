@@ -10,7 +10,7 @@ export const Card = ({title,target,username,date}) => {
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-600 ">{title}</h5>
                 
                 <p className="flex font-semibold text-slate-600">by {username}</p>
-                <p className="mb-3  text-black-700 font-semibold">{target} <div className="text-slate-500 inline-block">raised</div></p>
+                <div className="mb-3  text-black-700 font-semibold">{target} <div className="text-slate-500 inline-block">raised</div></div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5 ">
                 <div className="bg-blue-600 h-2.5 rounded-full w-20"></div>
                 </div>

@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AppLayout } from './components/AppLayout';
 import { Error } from './pages/Error'; 
 import { Signup } from './pages/Signup';
+import { Signin } from './pages/Signin';
 import { Landingpage } from './pages/LandingPage';
 import { StartFundcomp } from './components/StartFund'
 import { Browsefunds } from './components/Browsefunds';
@@ -27,6 +28,10 @@ function App() {
       path:'/signup',
       element: <Signup />,
       
+    },
+    {
+      path:'/signin',
+      element:<Signin />,
     },
     {
       path:'/new/createfund',

@@ -61,9 +61,8 @@ userRouter.post("/signup",upload.single("file"), async (req: Request, res: Respo
             await account.create({
                 user_id:userid,
                 balance:100+ Math.random()*10000
-            })
-
-            res.cookie("token",token);
+            });
+            
             res.json({
                 message:"User created Successfully!",
                 filedata:filedata,
@@ -98,9 +97,9 @@ userRouter.post("/signin",async (req: Request, res: Response) => {
         else{
             const secret = process.env.JWT_PASSWORD || "";
             const token = jwt.sign({username:body.username},secret,{expiresIn:"1d"});
-            res.cookie("token",token);
             res.json({
                 message:"User found successfully!",
+                token:token,
             })
         }
     }

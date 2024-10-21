@@ -29,14 +29,13 @@ export const StartFundcomp = () => {
   const handlefileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-        const fileurl = URL.createObjectURL(file);
-        setFile(fileurl);
+        setFile(file);
     }
     }
 
   return (
     <div className="max-w-lg mx-auto mt-20 p-6 bg-white rounded-lg shadow-2xl">
-      <h2 className="text-2xl font-semibold mb-4">Tell us more about your Fundraiser</h2>
+      <h2 className="text-2xl font-semibold mb-4">Information Regarding Fundraiser</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="text-sm font-medium text-gray-600">
@@ -138,45 +137,58 @@ export const StartFundcomp = () => {
         const [title, setTitle] = useState('');
         const [description, setDescription] = useState('');
         const [urgent, setUrgent] = useState(false);
-        const [operationDate, setOperationDate] = useState(null);
+        const [operationDate, setOperationDate] = useState("");
         const [pdffile,setPdffile] = useState(null);
 
         const handlefileChange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                const fileurl = URL.createObjectURL(file);
-                setPdffile(fileurl);
+                setPdffile(file);
             }
         }
 
         const handleSubmit = async (e) => {
           e.preventDefault();
-          const formdata = new FormData();
-          formdata.append('file', pdffile);
-          formdata.append('title', title);
-          formdata.append('description', description);
-          formdata.append('urgent', urgent);
-          formdata.append('operationDate', operationDate);
-          formdata.append('relation', relationparent);
-          formdata.append('education', educationparent);
-          formdata.append('employment', employmentparent);
-          formdata.append('target', amountparent);
+        
+          const formData = new FormData();
           
-          const upl = await axios.post('http://localhost:3000/api/v1/post/create',formdata);
-
-          if(upl.status === 200) {
-            console.log("Success!");
+          // Append the file objects to FormData
+          if (pdffile) {
+            formData.append('file', pdffile); // Actual file object for the medical document
           }
-          else{
-            console.log("Not successfull : ",upl);
+          if (optfile) {
+            formData.append('photo', optfile); // Optional file (photo or video)
           }
-
-
+        
+          // Append all the form fields to FormData
+          formData.append('title', title);
+          formData.append('description', description);
+          formData.append('urgent', urgent);
+          formData.append('operationDate', operationDate);
+          formData.append('relation', relationparent);
+          formData.append('education', educationparent);
+          formData.append('employment', employmentparent);
+          formData.append('target', amountparent);
+        
+          try {
+            const response = await axios.post('http://localhost:3000/api/v1/post/create', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+        
+            if (response.status === 200) {
+              console.log("Success!");
+            }
+          } catch (error) {
+            console.error("Error during submission:", error.message);
+          }
         };
+        
       
         return (
             <div className="max-w-lg mt-20 mx-auto p-6 bg-white rounded-lg shadow-2xl">
-              <h2 className="text-2xl font-semibold mb-4">Operation Fundraiser</h2>
+              <h2 className="text-2xl font-semibold mb-4">Tell us more about your Fundraiser</h2>
         
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

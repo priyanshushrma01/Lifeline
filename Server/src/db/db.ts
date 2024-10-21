@@ -26,6 +26,7 @@ const cardmodel = new mongoose.Schema({
     title:String,
     description:String,
     photo_id:String,
+    file_id:String,
     document_id:String,
     urgent_need:{
         type:Boolean,
