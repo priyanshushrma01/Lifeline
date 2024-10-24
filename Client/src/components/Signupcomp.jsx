@@ -47,7 +47,7 @@ export const Signupcomp = () => {
             if (request.status === 200) {
                 const token = request.data.token;
                 localStorage.setItem('token',token);
-                navigate('/');
+                navigate('/LandingPage');
             } else {
                 console.log("Error in creating user");
             }

@@ -25,11 +25,18 @@ export function Signincomp () {
                         setPassword(e.target.value);
                     }} />
 
-                    <button onClick={async ()=>{ await axios.post("http://localhost:3000/api/v1/user/signin",{
+                    <button onClick={async ()=>{ const request=await axios.post("http://localhost:3000/api/v1/user/signin",{
                         username,
                         password,
                     });
-                    navigate('/'); 
+                    console.log(request);
+                    if (request.status === 200) {
+                        const token = request.data.token;
+                        localStorage.setItem('token',token);
+                        navigate('/LandingPage');
+                    } else {
+                        console.log("Error in creating user");
+                    }
                     }} type="button" className="mt-4 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xl px-5 py-2.5 me-2 mb-2">Sign in</button>
 
                     <div className="text-left mt-2 text-lg text-gray-600">

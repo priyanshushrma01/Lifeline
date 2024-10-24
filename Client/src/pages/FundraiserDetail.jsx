@@ -1,9 +1,29 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const FundraiserDetail = () => {
-  const { id } = useParams();  // Get the id from the URL params
+  const { id } = useParams(); 
   const [fundraiser, setFundraiser] = useState(null);
+
+  function daysleft () {
+    if(fundraiser){
+      const currdate = Date.now();
+      const futdate = fundraiser.date;
+      const diff = Math.abs(futdate - currdate);
+      const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      return days;
+    }
+  }
+
+  // const fetchdata = async () => {
+  //   const response = await axios.get(`http://localhost:3000/api/v1/post/single/${id}`);
+  //   if (response.status === 200) {
+  //     setFundraiser(response.data);
+  //   } else {
+  //     console.error("Failed to fetch fundraiser");
+  //   }
+  // }
 
   useEffect(() => {
     // Fetch the correct fundraiser based on id
@@ -41,7 +61,6 @@ export const FundraiserDetail = () => {
       const selectedFundraiser = data.find(f => f.id === parseInt(id));
       setFundraiser(selectedFundraiser);
     };
-
     fetchFundraiser();
   }, [id]);
 
@@ -67,7 +86,7 @@ export const FundraiserDetail = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
             <p className="text-gray-700 text-lg font-semibold">Raised: <span className="text-green-600">{fundraiser.raised}</span> of {fundraiser.target}</p>
             <p className="text-gray-700 mt-2">Supporters: <span className="text-gray-800 font-semibold">{fundraiser.supporters}</span></p>
-            <p className="text-gray-700 mt-2">Days Left: <span className="text-red-600 font-semibold">{fundraiser.daysLeft}</span></p>
+            <p className="text-gray-700 mt-2">Days Left: <span className="text-red-600 font-semibold">{daysleft()}</span></p>
             <div className="relative mt-4 h-4 rounded-full overflow-hidden bg-gray-200">
               <div className="absolute top-0 left-0 h-full bg-green-500" style={{ width: `${(parseInt(fundraiser.raised.replace(/[^0-9]/g, "")) / parseInt(fundraiser.target.replace(/[^0-9]/g, ""))) * 100}%` }}></div>
             </div>

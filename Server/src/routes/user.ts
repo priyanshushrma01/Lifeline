@@ -75,48 +75,55 @@ const signinSchema = zod.object({
     username:zod.string(),
     password:zod.string(),
 })
-userRouter.post("/signin",async (req: Request, res: Response) => {
+userRouter.post("/signin", async (req: Request, res: Response) => {
     const body = req.body;
     const { success } = signinSchema.safeParse(body);
-    
+  
     if (!success) {
-        res.json({ error: "Invalid signin data" });
+      res.json({ error: "Invalid signin data" });
     } else {
-        const olduser = await user.findOne({ 
-            username: body.username ,
-            password:body.password,
+      const oldUser = await user.findOne({
+        username: body.username,
+        password: body.password,
+      });
+  
+      if (!oldUser) {
+        res.status(404).json({
+          message: "User not found!",
         });
-        
-        if (!olduser){
-            res.status(404).json({
-                message:"User not found!",
-            });
-        } 
-        else{
-            const secret = process.env.JWT_PASSWORD || "";
-            const token = jwt.sign({username:body.username},secret,{expiresIn:"1d"});
-            res.json({
-                message:"User found successfully!",
-                token:token,
-            })
+      } else {
+        const secret = JWT_PASSWORD;
+        const token = jwt.sign({ username: body.username }, secret, { expiresIn: "1d" });
+        res.json({
+          message: "User found successfully!",
+          token,
+        });
+      }
+    }
+  });
+  
+
+  userRouter.get('/me', check, async (req: Request, res: Response) => {
+    const id = req.createrid;
+
+    // Check if id is defined
+    if (!id) {
+        res.status(400).json({ message: "User ID is not defined." });
+        return;
+    }
+
+    try {
+        const me = await user.findById(id);  // Pass id directly here
+        if (me) {
+            res.json({ me });
+        } else {
+            res.status(404).json({ message: "User doesn't exist!" });
         }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-userRouter.get('/me',check,async function(req:Request,res:Response) {
-    const id = req.createrid;
-
-    const me = await user.findById({_id:id});
-    if(me){
-        res.json({
-            me,
-        });
-    }
-    else{
-        res.json({
-            mesaage:"User does'nt exist!",
-        })
-    }
-})
 
 export default userRouter;

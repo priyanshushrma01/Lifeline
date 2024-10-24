@@ -15,7 +15,7 @@ function App() {
       errorElement: <Error />,
       children: [ 
         {
-          path:'/',
+          path:'/LandingPage',
           element: <Landingpage />,
         },
         {
