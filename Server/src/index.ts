@@ -10,7 +10,7 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-mongoose.connect("mongodb://localhost:27017");
+mongoose.connect("mongodb+srv://rachitshahrawat:Sofi8ig0wY1SfUt6@cluster0.yaphe.mongodb.net/");
 
 app.use(express.json());
 app.use(cors({
